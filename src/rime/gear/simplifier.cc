@@ -185,8 +185,12 @@ bool SimplifiedTranslation::Replenish() {
 
 an<Translation> Simplifier::Apply(an<Translation> translation,
                                           CandidateList* candidates) {
-  if (!engine_->context()->get_option(option_name_)) {  // off
-    return translation;
+  vector<string> option_list;
+  boost::split(option_list, option_name_, boost::is_any_of("#"));
+  for (auto &opt: option_list) {
+    if (!engine_->context()->get_option(opt)) {  // off
+      return translation;
+    }
   }
   if (!initialized_) {
     Initialize();
