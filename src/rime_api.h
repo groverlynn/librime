@@ -299,6 +299,9 @@ RIME_API Bool RimeCandidateListFromIndex(RimeSessionId session_id,
 RIME_API Bool RimeSelectCandidate(RimeSessionId session_id, size_t index);
 RIME_API Bool RimeSelectCandidateOnCurrentPage(RimeSessionId session_id,
                                                size_t index);
+RIME_API Bool RimeHiliteCandidate(RimeSessionId session_id, size_t index);
+RIME_API Bool RimeHiliteCandidateOnCurrentPage(RimeSessionId session_id,
+                                               size_t index);
 RIME_API Bool RimeDeleteCandidate(RimeSessionId session_id, size_t index);
 RIME_API Bool RimeDeleteCandidateOnCurrentPage(RimeSessionId session_id,
                                                size_t index);
@@ -634,6 +637,10 @@ typedef struct rime_api_t {
   const char* (*get_state_label)(RimeSessionId session_id,
                                  const char* option_name,
                                  Bool state);
+
+  Bool (*hilite_candidate)(RimeSessionId session_id, size_t index);
+  Bool (*hilite_candidate_on_current_page)(RimeSessionId session_id,
+                                           size_t index);
 
   //! delete a candidate at the given index in candidate list.
   Bool (*delete_candidate)(RimeSessionId session_id, size_t index);

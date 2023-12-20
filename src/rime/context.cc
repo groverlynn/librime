@@ -121,6 +121,20 @@ bool Context::Select(size_t index) {
   return false;
 }
 
+bool Context::Hilite(size_t index) {
+  if (composition_.empty())
+    return false;
+  Segment& seg(composition_.back());
+  if (auto cand = seg.GetCandidateAt(index)) {
+    seg.selected_index = index;
+    seg.tags.insert("paging");
+    DLOG(INFO) << "Hilited: '" << cand->text() << "', index = " << index;
+    update_notifier_(this);
+    return true;
+  }
+  return false;
+}
+
 bool Context::DeleteCandidate(
     function<an<Candidate>(Segment& seg)> get_candidate) {
   if (composition_.empty())
