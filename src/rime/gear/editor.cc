@@ -188,33 +188,33 @@ ProcessResult Editor::AddToInput(Context* ctx, int ch) {
 FluidEditor::FluidEditor(const Ticket& ticket) : Editor(ticket, false) {
   auto& keymap = get_keymap();
   keymap.Bind({XK_space, 0}, &Editor::Confirm);
-  keymap.Bind({XK_BackSpace, 0}, &Editor::BackToPreviousInput);  //
+  keymap.Bind({XK_BackSpace, 0}, &Editor::BackToPreviousInput);
   keymap.Bind({XK_BackSpace, kControlMask}, &Editor::BackToPreviousSyllable);
-  keymap.Bind({XK_Return, 0}, &Editor::CommitComposition);          //
-  keymap.Bind({XK_Return, kControlMask}, &Editor::CommitRawInput);  //
-  keymap.Bind({XK_Return, kShiftMask}, &Editor::CommitScriptText);  //
+  keymap.Bind({XK_Return, 0}, &Editor::CommitComposition);
+  keymap.Bind({XK_Return, kControlMask}, &Editor::CommitRawInput);
+  keymap.Bind({XK_Return, kShiftMask}, &Editor::CommitScriptText);
   keymap.Bind({XK_Return, kControlMask | kShiftMask}, &Editor::CommitComment);
   keymap.Bind({XK_Delete, 0}, &Editor::DeleteChar);
   keymap.Bind({XK_Delete, kControlMask}, &Editor::DeleteCandidate);
   keymap.Bind({XK_Escape, 0}, &Editor::CancelComposition);
   keymap.Bind({XK_Clear, 0}, &Editor::CommitRawInput);
-  char_handler_ = &Editor::AddToInput;  //
+  char_handler_ = &Editor::AddToInput;
   LoadConfig();
 }
 
 ExpressEditor::ExpressEditor(const Ticket& ticket) : Editor(ticket, true) {
   auto& keymap = get_keymap();
   keymap.Bind({XK_space, 0}, &Editor::Confirm);
-  keymap.Bind({XK_BackSpace, 0}, &Editor::RevertLastEdit);  //
+  keymap.Bind({XK_BackSpace, 0}, &Editor::RevertLastEdit);
   keymap.Bind({XK_BackSpace, kControlMask}, &Editor::BackToPreviousSyllable);
-  keymap.Bind({XK_Return, 0}, &Editor::CommitRawInput);               //
-  keymap.Bind({XK_Return, kControlMask}, &Editor::CommitScriptText);  //
+  keymap.Bind({XK_Return, 0}, &Editor::CommitRawInput);
+  keymap.Bind({XK_Return, kControlMask}, &Editor::CommitScriptText);
   keymap.Bind({XK_Return, kControlMask | kShiftMask}, &Editor::CommitComment);
   keymap.Bind({XK_Delete, 0}, &Editor::DeleteChar);
   keymap.Bind({XK_Delete, kControlMask}, &Editor::DeleteCandidate);
   keymap.Bind({XK_Escape, 0}, &Editor::CancelComposition);
   keymap.Bind({XK_Clear, 0}, &Editor::CommitRawInput);
-  char_handler_ = &Editor::DirectCommit;  //
+  char_handler_ = &Editor::DirectCommit;
   LoadConfig();
 }
 
