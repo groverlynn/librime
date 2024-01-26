@@ -652,6 +652,8 @@ typedef struct rime_api_t {
                                                  const char* option_name,
                                                  Bool state,
                                                  Bool abbreviated);
+  const char* (*get_selected_option_in_radio_group)(RimeSessionId session_id,
+                                                    const char* option_name);
 
   Bool (*set_input)(RimeSessionId session_id, const char* input);
 } RimeApi;

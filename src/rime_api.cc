@@ -1093,6 +1093,32 @@ const char* RimeGetStateLabel(RimeSessionId session_id,
       .str;
 }
 
+RIME_API const char* RimeGetSelectedOptionInRadioGroup(
+    RimeSessionId session_id,
+    const char* option_name) {
+  an<Session> session(Service::instance().GetSession(session_id));
+  if (!session)
+    return nullptr;
+  Config* config = session->schema()->config();
+  if (!config)
+    return nullptr;
+  Switches switches(config);
+  auto the_option = switches.OptionByName(option_name);
+  if (the_option.found() && the_option.type == Switches::kRadioGroup) {
+    Context* ctx = session->context();
+    auto options = As<ConfigList>(the_option.the_switch->Get("options"));
+    for (size_t i = 0; i < options->size(); ++i) {
+      const string& radio_option = options->GetValueAt(i)->str();
+      if (ctx->get_option(radio_option)) {
+        return radio_option.c_str();
+      }
+    }
+  } else if (the_option.found() && the_option.type == Switches::kToggleOption) {
+    return option_name;
+  }
+  return nullptr;
+}
+
 RIME_API Bool RimeSetInput(RimeSessionId session_id, const char* input) {
   an<Session> session(Service::instance().GetSession(session_id));
   if (!session)
@@ -1199,6 +1225,8 @@ RIME_API RimeApi* rime_get_api() {
     s_api.delete_candidate = &RimeDeleteCandidate;
     s_api.delete_candidate_on_current_page = &RimeDeleteCandidateOnCurrentPage;
     s_api.get_state_label_abbreviated = &RimeGetStateLabelAbbreviated;
+    s_api.get_selected_option_in_radio_group =
+        &RimeGetSelectedOptionInRadioGroup;
     s_api.set_input = &RimeSetInput;
   }
   return &s_api;
