@@ -255,7 +255,7 @@ an<Translation> Simplifier::Apply(an<Translation> translation,
                                   CandidateList* candidates) {
   vector<string> option_list;
   boost::split(option_list, option_name_, boost::is_any_of("#"));
-  for (auto &opt : option_list) {
+  for (auto& opt : option_list) {
     if (!engine_->context()->get_option(opt)) {  // off
       return translation;
     }
