@@ -299,9 +299,6 @@ RIME_API Bool RimeCandidateListFromIndex(RimeSessionId session_id,
 RIME_API Bool RimeSelectCandidate(RimeSessionId session_id, size_t index);
 RIME_API Bool RimeSelectCandidateOnCurrentPage(RimeSessionId session_id,
                                                size_t index);
-RIME_API Bool RimeHiliteCandidate(RimeSessionId session_id, size_t index);
-RIME_API Bool RimeHiliteCandidateOnCurrentPage(RimeSessionId session_id,
-                                               size_t index);
 RIME_API Bool RimeDeleteCandidate(RimeSessionId session_id, size_t index);
 RIME_API Bool RimeDeleteCandidateOnCurrentPage(RimeSessionId session_id,
                                                size_t index);
@@ -649,10 +646,6 @@ typedef struct rime_api_t {
                                  const char* option_name,
                                  Bool state);
 
-  Bool (*hilite_candidate)(RimeSessionId session_id, size_t index);
-  Bool (*hilite_candidate_on_current_page)(RimeSessionId session_id,
-                                           size_t index);
-
   //! delete a candidate at the given index in candidate list.
   Bool (*delete_candidate)(RimeSessionId session_id, size_t index);
   //! delete a candidate from current page.
@@ -673,6 +666,14 @@ typedef struct rime_api_t {
   void (*get_prebuilt_data_dir_s)(char* dir, size_t buffer_size);
   void (*get_staging_dir_s)(char* dir, size_t buffer_size);
   void (*get_sync_dir_s)(char* dir, size_t buffer_size);
+
+  //! highlight a selection without committing
+  Bool (*highlight_candidate)(RimeSessionId session_id, size_t index);
+  //! highlight a selection without committing
+  Bool (*highlight_candidate_on_current_page)(RimeSessionId session_id,
+                                              size_t index);
+
+  Bool (*change_page)(RimeSessionId session_id, Bool backward);
 } RimeApi;
 
 //! API entry

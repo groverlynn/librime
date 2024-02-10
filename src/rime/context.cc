@@ -121,18 +121,26 @@ bool Context::Select(size_t index) {
   return false;
 }
 
-bool Context::Hilite(size_t index) {
-  if (composition_.empty())
+bool Context::Highlight(size_t index) {
+  if (composition_.empty() || !composition_.back().menu)
     return false;
   Segment& seg(composition_.back());
-  if (auto cand = seg.GetCandidateAt(index)) {
-    seg.selected_index = index;
-    seg.tags.insert("paging");
-    DLOG(INFO) << "Hilited: '" << cand->text() << "', index = " << index;
-    update_notifier_(this);
-    return true;
+  size_t new_index = index;
+  size_t candidate_count = seg.menu->Prepare(index + 1);
+  if (index >= candidate_count) {
+    DLOG(INFO) << "selection index exceeds candidate pool, fallback to last";
+    new_index = candidate_count - 1;
   }
-  return false;
+  size_t previous_index = seg.selected_index;
+  if (previous_index == new_index) {
+    DLOG(INFO) << "selection has not changed, currently at " << new_index;
+    return false;
+  }
+  seg.selected_index = new_index;
+  update_notifier_(this);
+  DLOG(INFO) << "selection changed from: " << previous_index
+             << " to: " << new_index;
+  return true;
 }
 
 bool Context::DeleteCandidate(

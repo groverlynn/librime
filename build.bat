@@ -200,9 +200,8 @@ cmake --build %build_dir% --config %build_config% --target install
 if errorlevel 1 goto error
 
 if "%build_test%" == "ON" (
-  pushd %build_dir%
-  ctest --output-on-failure
-  popd
+  ctest --test-dir %build_dir% -C %build_config%  --output-on-failure
+  if errorlevel 1 goto error
 )
 
 echo.
