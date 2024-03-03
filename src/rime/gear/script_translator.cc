@@ -112,10 +112,12 @@ class ScriptTranslation : public Translation {
                     Corrector* corrector,
                     Poet* poet,
                     const string& input,
-                    size_t start)
+                    size_t start,
+                    size_t end_of_input)
       : translator_(translator),
         poet_(poet),
         start_(start),
+        end_of_input_(end_of_input),
         syllabifier_(
             New<ScriptSyllabifier>(translator, corrector, input, start)),
         enable_correction_(corrector) {
@@ -137,6 +139,7 @@ class ScriptTranslation : public Translation {
   ScriptTranslator* translator_;
   Poet* poet_;
   size_t start_;
+  size_t end_of_input_;
   an<ScriptSyllabifier> syllabifier_;
 
   an<DictEntryCollector> phrase_;
@@ -189,9 +192,10 @@ an<Translation> ScriptTranslator::Query(const string& input,
   bool enable_user_dict =
       user_dict_ && user_dict_->loaded() && !IsUserDictDisabledFor(input);
 
+  size_t end_of_input = engine_->context()->input().length();
   // the translator should survive translations it creates
   auto result = New<ScriptTranslation>(this, corrector_.get(), poet_.get(),
-                                       input, segment.start);
+                                       input, segment.start, end_of_input);
   if (!result || !result->Evaluate(
                      dict_.get(), enable_user_dict ? user_dict_.get() : NULL)) {
     return nullptr;
@@ -307,7 +311,7 @@ string ScriptSyllabifier::GetPreeditString(const Phrase& cand) const {
   const auto& delimiters = translator_->delimiters();
   std::stack<size_t> lengths;
   string output;
-  SyllabifyTask task{cand.code(), syllable_graph_, cand.end() - start_,
+  SyllabifyTask task{cand.matching_code(), syllable_graph_, cand.end() - start_,
                      [&](SyllabifyTask* task, size_t depth, size_t current_pos,
                          size_t next_pos) {
                        size_t len = output.length();
@@ -338,33 +342,48 @@ string ScriptSyllabifier::GetOriginalSpelling(const Phrase& cand) const {
   return string();
 }
 
+static bool is_exact_match_phrase(const an<DictEntry>& entry) {
+  return entry && entry->matching_code_size == 0 ||
+         entry->matching_code_size == entry->code.size();
+}
+
 // ScriptTranslation implementation
 
 bool ScriptTranslation::Evaluate(Dictionary* dict, UserDictionary* user_dict) {
   size_t consumed = syllabifier_->BuildSyllableGraph(*dict->prism());
   const auto& syllable_graph = syllabifier_->syllable_graph();
+  bool predict_word =
+      translator_->enable_completion() && start_ + consumed == end_of_input_;
 
-  phrase_ = dict->Lookup(syllable_graph, 0);
+  phrase_ = dict->Lookup(syllable_graph, 0, predict_word);
   if (user_dict) {
-    user_phrase_ = user_dict->Lookup(syllable_graph, 0);
+    const size_t kUnlimitedDepth = 0;
+    const size_t kNumSyllablesToPredictWord = 4;
+    user_phrase_ =
+        user_dict->Lookup(syllable_graph, 0, kUnlimitedDepth,
+                          predict_word ? kNumSyllablesToPredictWord : 0);
   }
   if (!phrase_ && !user_phrase_)
     return false;
-  // make sentences when there is no exact-matching phrase candidate
-  size_t translated_len = 0;
-  if (phrase_ && !phrase_->empty())
-    translated_len = (std::max)(translated_len, phrase_->rbegin()->first);
-  if (user_phrase_ && !user_phrase_->empty())
-    translated_len = (std::max)(translated_len, user_phrase_->rbegin()->first);
-  if (translated_len < consumed &&
-      syllable_graph.edges.size() > 1) {  // at least 2 syllables required
-    sentence_ = MakeSentence(dict, user_dict);
-  }
 
   if (phrase_)
     phrase_iter_ = phrase_->rbegin();
   if (user_phrase_)
     user_phrase_iter_ = user_phrase_->rbegin();
+
+  // make sentences when there is no exact-matching phrase candidate
+  bool has_exact_match_phrase =
+      phrase_ && phrase_iter_->first == consumed &&
+      is_exact_match_phrase(phrase_iter_->second.Peek());
+  bool has_exact_match_user_phrase =
+      user_phrase_ && user_phrase_iter_->first == consumed &&
+      is_exact_match_phrase(user_phrase_iter_->second.Peek());
+  bool has_at_least_two_syllables = syllable_graph.edges.size() >= 2;
+  if (!has_exact_match_phrase && !has_exact_match_user_phrase &&
+      has_at_least_two_syllables) {
+    sentence_ = MakeSentence(dict, user_dict);
+  }
+
   return !CheckEmpty();
 }
 
