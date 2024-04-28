@@ -1,4 +1,3 @@
-plugins/*/
 build/
 build-static/
 debug/
@@ -9,10 +8,11 @@ lib/*
 bin/*
 share/*
 deps/*/*
+plugins/*/
 env.bat
 node_modules/
 *~
 .*.swp
 .cache/
 *.7z
-*.bz2
+.DS_Store
