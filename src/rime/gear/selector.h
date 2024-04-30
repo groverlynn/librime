@@ -36,7 +36,7 @@ class Selector : public Processor, public KeyBindingProcessor<Selector, 4> {
   Handler Home;
   Handler End;
 
-  bool SelectCandidateAt(Context* ctx, int index);
+  bool SelectCandidateAt(Context* ctx, size_t index);
 };
 
 }  // namespace rime

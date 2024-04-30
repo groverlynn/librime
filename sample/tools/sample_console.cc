@@ -98,7 +98,7 @@ bool execute_special_command(const char* line, RimeSessionId session_id) {
     if (rime->get_schema_list(&list)) {
       printf("schema list:\n");
       for (size_t i = 0; i < list.size; ++i) {
-        printf("%lu. %s [%s]\n", (i + 1), list.list[i].name,
+        printf("%zu. %s [%s]\n", (i + 1), list.list[i].name,
                list.list[i].schema_id);
       }
       rime->free_schema_list(&list);

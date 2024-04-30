@@ -6,7 +6,7 @@
 
 namespace rime {
 
-const int kContextualSearchLimit = 32;
+const size_t kContextualSearchLimit = 32;
 
 bool ContextualTranslation::Replenish() {
   vector<of<Phrase>> queue;

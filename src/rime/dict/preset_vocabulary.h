@@ -25,14 +25,14 @@ class PresetVocabulary {
   bool GetNextEntry(string* key, string* value);
   bool IsQualifiedPhrase(const string& phrase, const string& weight_str);
 
-  void set_max_phrase_length(int length) { max_phrase_length_ = length; }
+  void set_max_phrase_length(size_t length) { max_phrase_length_ = length; }
   void set_min_phrase_weight(double weight) { min_phrase_weight_ = weight; }
 
   static path DictFilePath(const string& vacabulary);
 
  protected:
   the<VocabularyDb> db_;
-  int max_phrase_length_ = 0;
+  size_t max_phrase_length_ = 0;
   double min_phrase_weight_ = 0.0;
 };
 

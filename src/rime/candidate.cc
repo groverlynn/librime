@@ -31,9 +31,9 @@ vector<of<Candidate>> Candidate::GetGenuineCandidates(
   return result;
 }
 
-int Candidate::compare(const Candidate& other) {
+ptrdiff_t Candidate::compare(const Candidate& other) {
   // the one nearer to the beginning of segment comes first
-  int k = start_ - other.start_;
+  ptrdiff_t k = start_ - other.start_;
   if (k != 0)
     return k;
   // then the longer comes first

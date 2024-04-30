@@ -297,7 +297,7 @@ bool KeyBinder::ReinterpretPagingKey(const KeyEvent& key_event) {
   if (key_event.release())
     return false;
   bool ret = false;
-  int ch = (key_event.modifier() == 0) ? key_event.keycode() : 0;
+  unsigned int ch = (key_event.modifier() == 0) ? key_event.keycode() : 0;
   // reinterpret period key followed by alphabetic keys
   // unless period/comma key has been used multiple times
   if (ch == '.' && (last_key_ == '.' || last_key_ == ',')) {

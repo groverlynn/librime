@@ -29,7 +29,7 @@ void Schema::FetchUsefulConfigItems() {
   if (!config_->GetString("schema/name", &schema_name_)) {
     schema_name_ = schema_id_;
   }
-  config_->GetInt("menu/page_size", &page_size_);
+  config_->GetInt("menu/page_size", (int*)&page_size_);
   if (page_size_ < 1) {
     page_size_ = 5;
   }

@@ -386,7 +386,7 @@ table::HeadIndex* Table::BuildHeadIndex(const Vocabulary& vocabulary,
     return NULL;
   }
   for (const auto& v : vocabulary) {
-    int syllable_id = v.first;
+    SyllableId syllable_id = v.first;
     auto& node(index->at[syllable_id]);
     const auto& entries(v.second.entries);
     if (!BuildEntryList(entries, &node.entries)) {
@@ -413,7 +413,7 @@ table::TrunkIndex* Table::BuildTrunkIndex(const Code& prefix,
   }
   size_t count = 0;
   for (const auto& v : vocabulary) {
-    int syllable_id = v.first;
+    SyllableId syllable_id = v.first;
     auto& node(index->at[count++]);
     node.key = syllable_id;
     const auto& entries(v.second.entries);

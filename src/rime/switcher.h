@@ -27,7 +27,7 @@ class Switcher : public Processor, public Engine {
   }
   virtual ProcessResult ProcessKeyEvent(const KeyEvent& key_event);
 
-  static int ForEachSchemaListEntry(
+  static size_t ForEachSchemaListEntry(
       Config* config,
       function<bool(const string& schema_id)> process_entry);
 

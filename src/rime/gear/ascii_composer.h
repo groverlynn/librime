@@ -25,7 +25,7 @@ enum AsciiModeSwitchStyle {
   kAsciiModeSwitchClear,
 };
 
-using AsciiModeSwitchKeyBindings = map<int /* keycode */, AsciiModeSwitchStyle>;
+using AsciiModeSwitchKeyBindings = map<unsigned int /* keycode */, AsciiModeSwitchStyle>;
 
 class AsciiComposer : public Processor {
  public:
@@ -37,7 +37,7 @@ class AsciiComposer : public Processor {
  protected:
   ProcessResult ProcessCapsLock(const KeyEvent& key_event);
   void LoadConfig(Schema* schema);
-  bool ToggleAsciiModeWithKey(int key_code);
+  bool ToggleAsciiModeWithKey(unsigned int key_code);
   void SwitchAsciiMode(bool ascii_mode, AsciiModeSwitchStyle style);
   void OnContextUpdate(Context* ctx);
 

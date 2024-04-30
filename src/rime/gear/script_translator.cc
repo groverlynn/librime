@@ -172,11 +172,11 @@ ScriptTranslator::ScriptTranslator(const Ticket& ticket)
   if (!engine_)
     return;
   if (Config* config = engine_->schema()->config()) {
-    config->GetInt(name_space_ + "/spelling_hints", &spelling_hints_);
+    config->GetInt(name_space_ + "/spelling_hints", (int*)&spelling_hints_);
     config->GetBool(name_space_ + "/always_show_comments",
                     &always_show_comments_);
     config->GetBool(name_space_ + "/enable_correction", &enable_correction_);
-    config->GetInt(name_space_ + "/max_homophones", &max_homophones_);
+    config->GetInt(name_space_ + "/max_homophones", (int*)&max_homophones_);
     poet_.reset(new Poet(language(), config));
   }
   if (enable_correction_) {
@@ -344,7 +344,7 @@ string ScriptSyllabifier::GetPreeditString(const Phrase& cand) const {
 
 string ScriptSyllabifier::GetOriginalSpelling(const Phrase& cand) const {
   if (translator_ &&
-      static_cast<int>(cand.code().size()) <= translator_->spelling_hints()) {
+      cand.code().size() <= translator_->spelling_hints()) {
     return translator_->Spell(cand.code());
   }
   return string();
@@ -495,7 +495,7 @@ bool ScriptTranslation::PrepareCandidate() {
   }
   if (user_phrase_code_length > 0 &&
       prefer_user_phrase(user_phrase_code_length, phrase_code_length, [this]() {
-        const int kNumExactMatchOnTop = 1;
+        const size_t kNumExactMatchOnTop = 1;
         size_t full_code_length = end_of_input_ - start_;
         return candidate_index_ >= kNumExactMatchOnTop ||
                prefer_user_phrase(
@@ -563,7 +563,7 @@ void ScriptTranslation::EnrollEntries(
 
 an<Sentence> ScriptTranslation::MakeSentence(Dictionary* dict,
                                              UserDictionary* user_dict) {
-  const int kMaxSyllablesForUserPhraseQuery = 5;
+  const size_t kMaxSyllablesForUserPhraseQuery = 5;
   const auto& syllable_graph = syllabifier_->syllable_graph();
   WordGraph graph;
   for (const auto& x : syllable_graph.edges) {

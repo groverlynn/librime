@@ -64,7 +64,7 @@ void Segmentation::Reset(const string& new_input) {
   DLOG(INFO) << "diff pos: " << diff_pos;
 
   // dispose segments that have changed
-  int disposed = 0;
+  size_t disposed = 0;
   while (!empty() && back().end > diff_pos) {
     pop_back();
     ++disposed;
@@ -82,7 +82,7 @@ void Segmentation::Reset(size_t num_segments) {
 }
 
 bool Segmentation::AddSegment(Segment segment) {
-  int start = GetCurrentStartPosition();
+  size_t start = GetCurrentStartPosition();
   if (segment.start != start) {
     // rule one: in one round, we examine only those segs
     // that are left-aligned to a same position

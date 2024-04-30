@@ -114,8 +114,9 @@ void SwitcherSettings::GetSelectedSchemasFromConfig() {
 
 void SwitcherSettings::GetHotkeysFromConfig() {
   auto hotkeys = config_.GetList("switcher/hotkeys");
-  if (!hotkeys) {
-    LOG(WARNING) << "hotkeys not defined.";
+  if (!hotkeys || hotkeys->empty()) {
+    LOG(WARNING) << "hotkeys not defined. Using the defaule Menu key.";
+    hotkeys_ = "Menu";
     return;
   }
   for (auto it = hotkeys->begin(); it != hotkeys->end(); ++it) {
@@ -129,6 +130,7 @@ void SwitcherSettings::GetHotkeysFromConfig() {
       hotkeys_ += ", ";
     hotkeys_ += hotkey;
   }
+  hotkeys_ += ", Menu";
 }
 
 }  // namespace rime

@@ -204,7 +204,7 @@ bool TextDb::LoadFromFile(const path& file) {
   Clear();
   TsvReader reader(file, format_.parser);
   DbSink sink(this);
-  int entries = 0;
+  size_t entries = 0;
   try {
     entries = reader >> sink;
   } catch (std::exception& ex) {
@@ -219,7 +219,7 @@ bool TextDb::SaveToFile(const path& file) {
   TsvWriter writer(file, format_.formatter);
   writer.file_description = format_.file_description;
   DbSource source(this);
-  int entries = 0;
+  size_t entries = 0;
   try {
     entries = writer << source;
   } catch (std::exception& ex) {

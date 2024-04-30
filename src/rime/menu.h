@@ -14,8 +14,8 @@
 namespace rime {
 
 struct Page {
-  int page_size = 0;
-  int page_no = 0;
+  size_t page_size = 0;
+  size_t page_no = 0;
   bool is_last_page = false;
   CandidateList candidates;
 };

@@ -28,7 +28,7 @@ class KeyBinder : public Processor {
 
   the<KeyBindings> key_bindings_;
   bool redirecting_;
-  int last_key_;
+  unsigned int last_key_;
 };
 
 }  // namespace rime

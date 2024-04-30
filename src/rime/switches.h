@@ -70,7 +70,7 @@ class Switches {
                                    bool abbreviated);
 
   StringSlice GetStateLabel(const string& option_name,
-                            int state,
+                            size_t state,
                             bool abbreviated);
 
  private:

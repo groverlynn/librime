@@ -31,7 +31,7 @@ typedef struct {
 } RimeUserDictIterator;
 
 typedef struct rime_levers_api_t {
-  int data_size;
+  size_t data_size;
 
   RimeCustomSettings* (*custom_settings_init)(const char* config_id,
                                               const char* generator_id);
@@ -68,7 +68,7 @@ typedef struct rime_levers_api_t {
   const char* (*get_schema_file_path)(RimeSchemaInfo* info);
   Bool (*select_schemas)(RimeSwitcherSettings* settings,
                          const char* schema_id_list[],
-                         int count);
+                         size_t count);
   const char* (*get_hotkeys)(RimeSwitcherSettings* settings);
   Bool (*set_hotkeys)(RimeSwitcherSettings* settings, const char* hotkeys);
 

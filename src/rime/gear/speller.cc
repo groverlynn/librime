@@ -26,10 +26,10 @@ static inline bool belongs_to(char ch, const string& charset) {
 }
 
 static bool reached_max_code_length(const an<Candidate>& cand,
-                                    int max_code_length) {
+                                    size_t max_code_length) {
   if (!cand)
     return false;
-  int code_length = static_cast<int>(cand->end() - cand->start());
+  size_t code_length = cand->end() - cand->start();
   return code_length >= max_code_length;
 }
 
@@ -69,7 +69,7 @@ Speller::Speller(const Ticket& ticket)
     config->GetString("speller/delimiter", &delimiters_);
     config->GetString("speller/initials", &initials_);
     config->GetString("speller/finals", &finals_);
-    config->GetInt("speller/max_code_length", &max_code_length_);
+    config->GetInt("speller/max_code_length", (int*)&max_code_length_);
     config->GetBool("speller/auto_select", &auto_select_);
     config->GetBool("speller/use_space", &use_space_);
     string pattern;
@@ -95,7 +95,7 @@ ProcessResult Speller::ProcessKeyEvent(const KeyEvent& key_event) {
   if (key_event.release() || key_event.ctrl() || key_event.alt() ||
       key_event.super())
     return kNoop;
-  int ch = key_event.keycode();
+  unsigned int ch = key_event.keycode();
   if (ch < 0x20 || ch >= 0x7f)  // not a valid key for spelling
     return kNoop;
   if (ch == XK_space && (!use_space_ || key_event.shift()))

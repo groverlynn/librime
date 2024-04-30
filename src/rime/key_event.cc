@@ -20,9 +20,9 @@ string KeyEvent::repr() const {
   // stringify modifiers
   std::ostringstream modifiers;
   if (modifier_) {
-    int k = modifier_ & kModifierMask;
+    unsigned int k = modifier_ & kModifierMask;
     const char* modifier_name = NULL;
-    for (int i = 0; k; ++i, k >>= 1) {
+    for (size_t i = 0; k; ++i, k >>= 1) {
       if (!(k & 1))
         continue;
       modifier_name = RimeGetModifierName(k << i);
@@ -54,12 +54,12 @@ bool KeyEvent::Parse(const string& repr) {
     return false;
   }
   if (repr.size() == 1) {
-    keycode_ = static_cast<int>(repr[0]);
+    keycode_ = static_cast<unsigned int>(repr[0]);
   } else {
     size_t start = 0;
     size_t found = 0;
     string token;
-    int mask = 0;
+    unsigned int mask = 0;
     while ((found = repr.find('+', start)) != string::npos) {
       token = repr.substr(start, found - start);
       mask = RimeGetModifierByName(token.c_str());
@@ -87,7 +87,7 @@ KeySequence::KeySequence(const string& repr) {
 }
 
 static bool is_unescaped_character(const KeyEvent& key_event) {
-  int ch = key_event.keycode();
+  unsigned int ch = key_event.keycode();
   return key_event.modifier() == 0 && ch >= 0x20 && ch <= 0x7e && ch != '{' &&
          ch != '}';
 }

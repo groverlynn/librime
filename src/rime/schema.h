@@ -25,7 +25,7 @@ class Schema {
   Config* config() const { return config_.get(); }
   void set_config(Config* config) { config_.reset(config); }
 
-  int page_size() const { return page_size_; }
+  size_t page_size() const { return page_size_; }
   bool page_down_cycle() const { return page_down_cycle_; }
   const string& select_keys() const { return select_keys_; }
   void set_select_keys(const string& keys) { select_keys_ = keys; }
@@ -37,7 +37,7 @@ class Schema {
   string schema_name_;
   the<Config> config_;
   // frequently used config items
-  int page_size_ = 5;
+  size_t page_size_ = 5;
   bool page_down_cycle_ = false;
   string select_keys_;
 };

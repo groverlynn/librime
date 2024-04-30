@@ -16,7 +16,7 @@ struct CommitRecord {
   string text;
   CommitRecord(const string& a_type, const string& a_text)
       : type(a_type), text(a_text) {}
-  CommitRecord(int keycode) : type("thru"), text(1, keycode) {}
+  CommitRecord(unsigned int keycode) : type("thru"), text(1, keycode) {}
 };
 
 class KeyEvent;

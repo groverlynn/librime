@@ -117,7 +117,7 @@ int UserDictManager::Export(const string& dict_name, const path& text_file) {
   TsvWriter writer(text_file, TableDb::format.formatter);
   writer.file_description = "Rime user dictionary export";
   DbSource source(db.get());
-  int num_entries = 0;
+  size_t num_entries = 0;
   try {
     num_entries = writer << source;
   } catch (std::exception& ex) {
@@ -125,7 +125,7 @@ int UserDictManager::Export(const string& dict_name, const path& text_file) {
     return -1;
   }
   DLOG(INFO) << num_entries << " entries exported.";
-  return num_entries;
+  return (int)num_entries;
 }
 
 int UserDictManager::Import(const string& dict_name, const path& text_file) {
@@ -140,7 +140,7 @@ int UserDictManager::Import(const string& dict_name, const path& text_file) {
     return -1;
   TsvReader reader(text_file, TableDb::format.parser);
   UserDbImporter importer(db.get());
-  int num_entries = 0;
+  size_t num_entries = 0;
   try {
     num_entries = reader >> importer;
   } catch (std::exception& ex) {
@@ -148,7 +148,7 @@ int UserDictManager::Import(const string& dict_name, const path& text_file) {
     return -1;
   }
   DLOG(INFO) << num_entries << " entries imported.";
-  return num_entries;
+  return (int)num_entries;
 }
 
 bool UserDictManager::UpgradeUserDict(const string& dict_name) {
@@ -211,7 +211,7 @@ bool UserDictManager::SynchronizeAll() {
   UserDictList user_dicts;
   GetUserDictList(&user_dicts);
   LOG(INFO) << "synchronizing " << user_dicts.size() << " user dicts.";
-  int failure = 0;
+  size_t failure = 0;
   for (const string& dict_name : user_dicts) {
     if (!Synchronize(dict_name))
       ++failure;

@@ -32,7 +32,7 @@ using SpellingMapItem = List<SpellingDescriptor>;
 using SpellingMap = Array<SpellingMapItem>;
 
 struct Metadata {
-  static const int kFormatMaxLength = 32;
+  static const size_t kFormatMaxLength = 32;
   char format[kFormatMaxLength];
   uint32_t dict_file_checksum;
   uint32_t schema_file_checksum;

@@ -33,7 +33,7 @@ struct Segment {
 
   Segment() = default;
 
-  Segment(int start_pos, int end_pos)
+  Segment(size_t start_pos, size_t end_pos)
       : start(start_pos), end(end_pos), length(end_pos - start_pos) {}
 
   void Clear() {

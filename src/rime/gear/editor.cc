@@ -46,7 +46,7 @@ Editor::Editor(const Ticket& ticket, bool auto_commit)
 ProcessResult Editor::ProcessKeyEvent(const KeyEvent& key_event) {
   if (key_event.release())
     return kRejected;
-  int ch = key_event.keycode();
+  unsigned int ch = key_event.keycode();
   Context* ctx = engine_->context();
   if (ctx->IsComposing()) {
     auto result = KeyBindingProcessor::ProcessKeyEvent(key_event, ctx, 0,
@@ -175,12 +175,12 @@ bool Editor::CancelComposition(Context* ctx) {
   return true;
 }
 
-ProcessResult Editor::DirectCommit(Context* ctx, int ch) {
+ProcessResult Editor::DirectCommit(Context* ctx, unsigned int ch) {
   ctx->Commit();
   return kRejected;
 }
 
-ProcessResult Editor::AddToInput(Context* ctx, int ch) {
+ProcessResult Editor::AddToInput(Context* ctx, unsigned int ch) {
   ctx->PushInput(ch);
   ctx->BeginEditing();
   return kAccepted;

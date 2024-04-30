@@ -160,15 +160,14 @@ StringSlice Switches::GetStateLabel(an<ConfigMap> the_switch,
 }
 
 StringSlice Switches::GetStateLabel(const string& option_name,
-                                    int state,
+                                    size_t state,
                                     bool abbreviated) {
   auto the_option = OptionByName(option_name);
   if (!the_option.found()) {
     return {nullptr, 0};
   }
   if (the_option.type == kToggleOption) {
-    size_t state_index = static_cast<size_t>(state);
-    return GetStateLabel(the_option.the_switch, state_index, abbreviated);
+    return GetStateLabel(the_option.the_switch, state, abbreviated);
   }
   if (the_option.type == kRadioGroup) {
     // if the query is a deselected option among the radio group, do not

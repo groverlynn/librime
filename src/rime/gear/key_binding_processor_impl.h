@@ -5,16 +5,16 @@
 
 namespace rime {
 
-template <class T, int N>
+template <class T, size_t N>
 const typename KeyBindingProcessor<T, N>::ActionDef
     KeyBindingProcessor<T, N>::kActionNoop = {"noop", nullptr};
 
-template <class T, int N>
+template <class T, size_t N>
 ProcessResult KeyBindingProcessor<T, N>::ProcessKeyEvent(
     const KeyEvent& key_event,
     Context* ctx,
-    int keymap_selector,
-    int fallback_options) {
+    size_t keymap_selector,
+    FallbackOptions fallback_options) {
   auto& keymap = get_keymap(keymap_selector);
   // exact match
   if (Accept(key_event, ctx, keymap)) {
@@ -45,14 +45,14 @@ ProcessResult KeyBindingProcessor<T, N>::ProcessKeyEvent(
   return kNoop;
 }
 
-template <class T, int N>
+template <class T, size_t N>
 typename KeyBindingProcessor<T, N>::Keymap&
-KeyBindingProcessor<T, N>::get_keymap(int keymap_selector) {
+KeyBindingProcessor<T, N>::get_keymap(size_t keymap_selector) {
   DCHECK_LT(keymap_selector, N);
   return keymaps_[keymap_selector];
 }
 
-template <class T, int N>
+template <class T, size_t N>
 bool KeyBindingProcessor<T, N>::Accept(const KeyEvent& key_event,
                                        Context* ctx,
                                        Keymap& keymap) {
@@ -67,7 +67,7 @@ bool KeyBindingProcessor<T, N>::Accept(const KeyEvent& key_event,
   return false;
 }
 
-template <class T, int N>
+template <class T, size_t N>
 void KeyBindingProcessor<T, N>::Keymap::Bind(KeyEvent key_event,
                                              HandlerPtr action) {
   if (action) {
@@ -77,10 +77,10 @@ void KeyBindingProcessor<T, N>::Keymap::Bind(KeyEvent key_event,
   }
 }
 
-template <class T, int N>
+template <class T, size_t N>
 void KeyBindingProcessor<T, N>::LoadConfig(Config* config,
                                            const string& section,
-                                           int keymap_selector) {
+                                           size_t keymap_selector) {
   auto& keymap = get_keymap(keymap_selector);
   if (auto bindings = config->GetMap(section + "/bindings")) {
     for (auto it = bindings->begin(); it != bindings->end(); ++it) {

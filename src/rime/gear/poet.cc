@@ -110,7 +110,7 @@ bool Poet::LeftAssociateCompare(const Line& one, const Line& other) {
 // keep the best line candidate per last phrase
 using LineCandidates = hash_map<string, Line>;
 
-template <int N>
+template <size_t N>
 static vector<const Line*> find_top_candidates(const LineCandidates& candidates,
                                                Poet::Compare compare) {
   vector<const Line*> top;

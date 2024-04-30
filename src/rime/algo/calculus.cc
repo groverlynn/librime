@@ -71,7 +71,7 @@ bool Transliteration::Apply(Spelling* spelling) {
     return false;
   bool modified = false;
   const char* p = spelling->str.c_str();
-  const int buffer_len = 256;
+  const size_t buffer_len = 256;
   char buffer[buffer_len] = "";
   char* q = buffer;
   uint32_t c;

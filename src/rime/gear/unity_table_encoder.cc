@@ -50,7 +50,7 @@ void UnityTableEncoder::CreateEntry(const string& word,
   DictEntry entry;
   entry.text = word;
   entry.custom_code = code_str + ' ';
-  int commits = (weight_str == "0") ? 0 : 1;
+  size_t commits = (weight_str == "0") ? 0 : 1;
   user_dict_->UpdateEntry(entry, commits, kEncodedPrefix);
 }
 

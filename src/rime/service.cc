@@ -126,7 +126,7 @@ bool Service::DestroySession(SessionId session_id) {
 
 void Service::CleanupStaleSessions() {
   time_t now = time(NULL);
-  int count = 0;
+  size_t count = 0;
   for (auto it = sessions_.begin(); it != sessions_.end();) {
     if (it->second &&
         it->second->last_active_time() < now - Session::kLifeSpan) {

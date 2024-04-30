@@ -102,7 +102,7 @@ bool PresetVocabulary::IsQualifiedPhrase(const string& phrase,
   if (max_phrase_length_ > 0) {
     size_t length = utf8::unchecked::distance(phrase.c_str(),
                                               phrase.c_str() + phrase.length());
-    if (static_cast<int>(length) > max_phrase_length_)
+    if (length > max_phrase_length_)
       return false;
   }
   if (min_phrase_weight_ > 0.0) {

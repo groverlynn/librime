@@ -140,13 +140,13 @@ string Composition::GetScriptText() const {
 
 string Composition::GetDebugText() const {
   string result;
-  int i = 0;
+  size_t i = 0;
   for (const Segment& seg : *this) {
     if (i++ > 0)
       result += "|";
     if (!seg.tags.empty()) {
       result += "{";
-      int j = 0;
+      size_t j = 0;
       for (const string& tag : seg.tags) {
         if (j++ > 0)
           result += ",";

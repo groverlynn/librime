@@ -66,7 +66,7 @@ ProcessResult AsciiComposer::ProcessKeyEvent(const KeyEvent& key_event) {
     if (result != kNoop)
       return result;
   }
-  int ch = key_event.keycode();
+  unsigned int ch = key_event.keycode();
   if (ch == XK_Eisu_toggle) {  // Alphanumeric toggle
     if (!key_event.release()) {
       shift_key_pressed_ = ctrl_key_pressed_ = false;
@@ -122,7 +122,7 @@ ProcessResult AsciiComposer::ProcessKeyEvent(const KeyEvent& key_event) {
 }
 
 ProcessResult AsciiComposer::ProcessCapsLock(const KeyEvent& key_event) {
-  int ch = key_event.keycode();
+  unsigned int ch = key_event.keycode();
   if (ch == XK_Caps_Lock) {
     if (!key_event.release()) {
       shift_key_pressed_ = ctrl_key_pressed_ = false;
@@ -197,7 +197,7 @@ void AsciiComposer::LoadConfig(Schema* schema) {
   }
 }
 
-bool AsciiComposer::ToggleAsciiModeWithKey(int key_code) {
+bool AsciiComposer::ToggleAsciiModeWithKey(unsigned int key_code) {
   auto it = bindings_.find(key_code);
   if (it == bindings_.end())
     return false;

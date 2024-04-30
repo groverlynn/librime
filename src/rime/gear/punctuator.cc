@@ -62,7 +62,7 @@ ProcessResult Punctuator::ProcessKeyEvent(const KeyEvent& key_event) {
   if (key_event.release() || key_event.ctrl() || key_event.alt() ||
       key_event.super())
     return kNoop;
-  int ch = key_event.keycode();
+  unsigned int ch = key_event.keycode();
   if (ch < 0x20 || ch >= 0x7f)
     return kNoop;
   Context* ctx = engine_->context();
@@ -164,7 +164,7 @@ PunctSegmentor::PunctSegmentor(const Ticket& ticket) : Segmentor(ticket) {
 
 bool PunctSegmentor::Proceed(Segmentation* segmentation) {
   const string& input = segmentation->input();
-  int k = segmentation->GetCurrentStartPosition();
+  size_t k = segmentation->GetCurrentStartPosition();
   if (k == input.length())
     return false;  // no chance for others too
   char ch = input[k];

@@ -123,7 +123,7 @@ class UserDbMerger : public Sink {
   TickCount our_tick_;
   TickCount their_tick_;
   TickCount max_tick_;
-  int merged_entries_;
+  size_t merged_entries_;
 };
 
 class UserDbImporter : public Sink {

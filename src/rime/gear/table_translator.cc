@@ -219,8 +219,8 @@ TableTranslator::TableTranslator(const Ticket& ticket)
     config->GetBool(name_space_ + "/enable_encoder", &enable_encoder_);
     config->GetBool(name_space_ + "/encode_commit_history",
                     &encode_commit_history_);
-    config->GetInt(name_space_ + "/max_phrase_length", &max_phrase_length_);
-    config->GetInt(name_space_ + "/max_homographs", &max_homographs_);
+    config->GetInt(name_space_ + "/max_phrase_length", (int*)&max_phrase_length_);
+    config->GetInt(name_space_ + "/max_homographs", (int*)&max_homographs_);
     if (enable_sentence_ || sentence_over_completion_ ||
         contextual_suggestions_) {
       poet_.reset(new Poet(language(), config, Poet::LeftAssociateCompare));
@@ -342,7 +342,7 @@ bool TableTranslator::Memorize(const CommitEntry& commit_entry) {
           phrase = it->text + phrase;  // prepend another word
           size_t phrase_length = utf8::unchecked::distance(
               phrase.c_str(), phrase.c_str() + phrase.length());
-          if (static_cast<int>(phrase_length) > max_phrase_length_)
+          if (phrase_length > max_phrase_length_)
             break;
           DLOG(INFO) << "phrase: " << phrase;
           encoder_->EncodePhrase(phrase, "0");
@@ -482,7 +482,7 @@ void SentenceTranslation::PrepareSentence() {
   const string& delimiters(translator_->delimiters());
   // split syllables
   size_t pos = 0;
-  for (int len : sentence_->word_lengths()) {
+  for (size_t len : sentence_->word_lengths()) {
     if (pos > 0 && delimiters.find(preedit[pos - 1]) == string::npos) {
       preedit.insert(pos, 1, ' ');
       ++pos;
@@ -501,8 +501,8 @@ bool SentenceTranslation::CheckEmpty() {
 
 bool SentenceTranslation::PreferUserPhrase() const {
   // compare code length
-  int user_phrase_code_length = 0;
-  int table_code_length = 0;
+  size_t user_phrase_code_length = 0;
+  size_t table_code_length = 0;
   if (!user_phrase_collector_.empty()) {
     user_phrase_code_length = user_phrase_collector_.rbegin()->first;
   }
@@ -528,7 +528,7 @@ inline static size_t consume_trailing_delimiters(size_t pos,
 template <class Iter>
 inline static void collect_entries(DictEntryList& entries,
                                    Iter& iter,
-                                   int max_entries) {
+                                   size_t max_entries) {
   if (entries.size() < max_entries && !iter.exhausted()) {
     entries.push_back(iter.Peek());
     // alters iter if collecting more than 1 entries

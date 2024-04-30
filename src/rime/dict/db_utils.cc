@@ -9,10 +9,10 @@
 
 namespace rime {
 
-int Source::Dump(Sink* sink) {
+size_t Source::Dump(Sink* sink) {
   if (!sink)
     return 0;
-  int num_entries = 0;
+  size_t num_entries = 0;
   string key, value;
   while (MetaGet(&key, &value)) {
     if (sink->MetaPut(key, value))

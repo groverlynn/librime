@@ -25,7 +25,7 @@ class RimeTableTest : public ::testing::Test {
   virtual void TearDown() { table_->Close(); }
 
  protected:
-  static const int total_num_entries = 8;
+  static const size_t total_num_entries = 8;
 
   static void PrepareSampleVocabulary(rime::Syllabary& syll,
                                       rime::Vocabulary& voc);

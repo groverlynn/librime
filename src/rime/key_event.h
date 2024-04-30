@@ -17,14 +17,14 @@ namespace rime {
 class KeyEvent {
  public:
   KeyEvent() = default;
-  KeyEvent(int keycode, int modifier)
+  KeyEvent(unsigned int keycode, unsigned int modifier)
       : keycode_(keycode), modifier_(modifier) {}
   RIME_API KeyEvent(const string& repr);
 
-  int keycode() const { return keycode_; }
-  void keycode(int value) { keycode_ = value; }
-  int modifier() const { return modifier_; }
-  void modifier(int value) { modifier_ = value; }
+  unsigned int keycode() const { return keycode_; }
+  void keycode(unsigned int value) { keycode_ = value; }
+  unsigned int modifier() const { return modifier_; }
+  void modifier(unsigned int value) { modifier_ = value; }
 
   bool shift() const { return (modifier_ & kShiftMask) != 0; }
   bool ctrl() const { return (modifier_ & kControlMask) != 0; }
@@ -51,8 +51,8 @@ class KeyEvent {
   }
 
  private:
-  int keycode_ = 0;
-  int modifier_ = 0;
+  unsigned int keycode_ = 0;
+  unsigned int modifier_ = 0;
 };
 
 // 按鍵序列

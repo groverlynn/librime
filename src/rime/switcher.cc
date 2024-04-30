@@ -69,7 +69,7 @@ ProcessResult Switcher::ProcessKeyEvent(const KeyEvent& key_event) {
     if (key_event.release() || key_event.ctrl() || key_event.alt()) {
       return kAccepted;
     }
-    int ch = key_event.keycode();
+    unsigned int ch = key_event.keycode();
     if (ch == XK_space || ch == XK_Return) {
       context_->ConfirmCurrentSelection();
     } else if (ch == XK_Escape) {
@@ -85,11 +85,11 @@ void Switcher::HighlightNextSchema() {
   if (comp.empty() || !comp.back().menu)
     return;
   Segment& seg(comp.back());
-  int index = seg.selected_index;
+  size_t index = seg.selected_index;
   an<Candidate> option;
   do {
     ++index;  // next
-    int candidate_count = seg.menu->Prepare(index + 1);
+    size_t candidate_count = seg.menu->Prepare(index + 1);
     if (candidate_count <= index) {
       index = 0;  // passed the end; rewind
       break;
@@ -143,13 +143,13 @@ static an<ConfigValue> ParseSchemaListEntry(Config* config,
   return schema_property;
 }
 
-int Switcher::ForEachSchemaListEntry(
-    Config* config,
-    function<bool(const string& schema_id)> process_entry) {
+size_t Switcher::ForEachSchemaListEntry(
+       Config* config,
+       function<bool(const string& schema_id)> process_entry) {
   auto schema_list = config->GetList("schema_list");
   if (!schema_list)
     return 0;
-  int num_processed_entries = 0;
+  size_t num_processed_entries = 0;
   for (auto iter = schema_list->begin(); iter != schema_list->end(); ++iter) {
     auto entry = ParseSchemaListEntry(config, As<ConfigMap>(*iter));
     if (!entry)
@@ -261,8 +261,8 @@ void Switcher::LoadSettings() {
   if (!config->GetString("switcher/caption", &caption_) || caption_.empty()) {
     caption_ = ":-)";
   }
+  hotkeys_.clear();
   if (auto hotkeys = config->GetList("switcher/hotkeys")) {
-    hotkeys_.clear();
     for (size_t i = 0; i < hotkeys->size(); ++i) {
       auto value = hotkeys->GetValueAt(i);
       if (!value)
@@ -270,6 +270,7 @@ void Switcher::LoadSettings() {
       hotkeys_.push_back(KeyEvent(value->str()));
     }
   }
+  hotkeys_.push_back(KeyEvent("Menu"));
   if (auto options = config->GetList("switcher/save_options")) {
     save_options_.clear();
     for (auto it = options->begin(); it != options->end(); ++it) {

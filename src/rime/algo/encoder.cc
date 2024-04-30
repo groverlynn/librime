@@ -12,8 +12,8 @@
 
 namespace rime {
 
-static const int kEncoderDfsLimit = 32;
-static const int kMaxPhraseLength = 32;
+static const size_t kEncoderDfsLimit = 32;
+static const size_t kMaxPhraseLength = 32;
 
 string RawCode::ToString() const {
   return strings::join(*this, " ");
@@ -63,8 +63,8 @@ bool TableEncoder::LoadSettings(Config* config) {
         continue;
       r.min_word_length = r.max_word_length = 0;
       if (an<ConfigValue> value = rule->GetValue("length_equal")) {
-        int length = 0;
-        if (!value->GetInt(&length)) {
+        size_t length = 0;
+        if (!value->GetInt((int*)&length)) {
           LOG(ERROR) << "invalid length";
           continue;
         }
@@ -75,8 +75,8 @@ bool TableEncoder::LoadSettings(Config* config) {
       } else if (auto range = As<ConfigList>(rule->Get("length_in_range"))) {
         if (range->size() != 2 || !range->GetValueAt(0) ||
             !range->GetValueAt(1) ||
-            !range->GetValueAt(0)->GetInt(&r.min_word_length) ||
-            !range->GetValueAt(1)->GetInt(&r.max_word_length) ||
+            !range->GetValueAt(0)->GetInt((int*)&r.min_word_length) ||
+            !range->GetValueAt(1)->GetInt((int*)&r.max_word_length) ||
             r.min_word_length > r.max_word_length) {
           LOG(ERROR) << "invalid range.";
           continue;
@@ -139,7 +139,7 @@ bool TableEncoder::IsCodeExcluded(const string& code) {
 }
 
 bool TableEncoder::Encode(const RawCode& code, string* result) {
-  int num_syllables = static_cast<int>(code.size());
+  size_t num_syllables = code.size();
   for (const TableEncodingRule& rule : encoding_rules_) {
     if (num_syllables < rule.min_word_length ||
         num_syllables > rule.max_word_length) {
@@ -236,11 +236,11 @@ int TableEncoder::CalculateCodeIndex(const string& code, int index, int start) {
 bool TableEncoder::EncodePhrase(const string& phrase, const string& value) {
   size_t phrase_length = utf8::unchecked::distance(
       phrase.c_str(), phrase.c_str() + phrase.length());
-  if (static_cast<int>(phrase_length) > max_phrase_length_)
+  if (phrase_length > max_phrase_length_)
     return false;
 
   RawCode code;
-  int limit = kEncoderDfsLimit;
+  size_t limit = kEncoderDfsLimit;
   return DfsEncode(phrase, value, 0, &code, &limit);
 }
 
@@ -248,7 +248,7 @@ bool TableEncoder::DfsEncode(const string& phrase,
                              const string& value,
                              size_t start_pos,
                              RawCode* code,
-                             int* limit) {
+                             size_t* limit) {
   if (start_pos == phrase.length()) {
     if (limit) {
       --*limit;
@@ -294,11 +294,11 @@ ScriptEncoder::ScriptEncoder(PhraseCollector* collector) : Encoder(collector) {}
 bool ScriptEncoder::EncodePhrase(const string& phrase, const string& value) {
   size_t phrase_length = utf8::unchecked::distance(
       phrase.c_str(), phrase.c_str() + phrase.length());
-  if (static_cast<int>(phrase_length) > kMaxPhraseLength)
+  if (phrase_length > kMaxPhraseLength)
     return false;
 
   RawCode code;
-  int limit = kEncoderDfsLimit;
+  size_t limit = kEncoderDfsLimit;
   return DfsEncode(phrase, value, 0, &code, &limit);
 }
 
@@ -306,7 +306,7 @@ bool ScriptEncoder::DfsEncode(const string& phrase,
                               const string& value,
                               size_t start_pos,
                               RawCode* code,
-                              int* limit) {
+                              size_t* limit) {
   if (start_pos == phrase.length()) {
     if (limit) {
       --*limit;

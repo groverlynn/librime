@@ -1338,8 +1338,8 @@ static const char key_names[] =
     "VoidSymbol\0";
 
 typedef struct {
-  int keyval;
-  int offset;
+  unsigned int keyval;
+  unsigned int offset;
 } key_entry;
 
 static const key_entry keys_by_keyval[] = {
@@ -2000,11 +2000,11 @@ static const key_entry keys_by_name[] = {
     {0x0000ff, 1270},  {0x0000a5, 468},   {0x00007a, 383},   {0x0001bf, 1456},
     {0x0001bc, 1430},  {0x0001be, 1449}};
 
-RIME_API int RimeGetModifierByName(const char* name) {
-  const int n = sizeof(modifier_name) / sizeof(const char*);
+RIME_API unsigned int RimeGetModifierByName(const char* name) {
+  const size_t n = sizeof(modifier_name) / sizeof(const char*);
   if (!name)
     return 0;
-  for (int i = 0; i < n; ++i) {
+  for (size_t i = 0; i < n; ++i) {
     if (modifier_name[i] && !strcmp(name, modifier_name[i])) {
       return (1 << i);
     }
@@ -2012,9 +2012,9 @@ RIME_API int RimeGetModifierByName(const char* name) {
   return 0;
 }
 
-RIME_API const char* RimeGetModifierName(int modifier) {
-  const int n = sizeof(modifier_name) / sizeof(const char*);
-  for (int i = 0; i < n && modifier != 0; ++i) {
+RIME_API const char* RimeGetModifierName(unsigned int modifier) {
+  const size_t n = sizeof(modifier_name) / sizeof(const char*);
+  for (size_t i = 0; i < n && modifier != 0; ++i) {
     if ((modifier & 1) != 0) {
       return modifier_name[i];
     }
@@ -2023,7 +2023,7 @@ RIME_API const char* RimeGetModifierName(int modifier) {
   return NULL;
 }
 
-RIME_API int RimeGetKeycodeByName(const char* name) {
+RIME_API unsigned int RimeGetKeycodeByName(const char* name) {
   for (const key_entry* p = keys_by_keyval; p->keyval != XK_VoidSymbol; ++p) {
     if (!strcmp(name, key_names + p->offset)) {
       return p->keyval;
@@ -2032,9 +2032,9 @@ RIME_API int RimeGetKeycodeByName(const char* name) {
   return XK_VoidSymbol;
 }
 
-RIME_API const char* RimeGetKeyName(int keycode) {
-  const int n = sizeof(keys_by_name) / sizeof(const key_entry);
-  for (int i = 0; i < n; ++i) {
+RIME_API const char* RimeGetKeyName(unsigned int keycode) {
+  const size_t n = sizeof(keys_by_name) / sizeof(const key_entry);
+  for (size_t i = 0; i < n; ++i) {
     if (keycode == keys_by_name[i].keyval) {
       return key_names + keys_by_name[i].offset;
     }

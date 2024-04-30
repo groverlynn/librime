@@ -49,14 +49,14 @@ class RimeConsole {
     const Segment& current(comp.back());
     if (!current.menu)
       return;
-    int page_size = engine_->active_engine()->schema()->page_size();
-    int page_no = current.selected_index / page_size;
+    size_t page_size = engine_->active_engine()->schema()->page_size();
+    size_t page_no = current.selected_index / page_size;
     the<Page> page(current.menu->CreatePage(page_size, page_no));
     if (!page)
       return;
     std::cout << "page_no: " << page_no << ", index: " << current.selected_index
               << std::endl;
-    int i = 0;
+    size_t i = 0;
     for (const an<Candidate>& cand : page->candidates) {
       std::cout << "cand. " << (++i % 10) << ": [";
       std::cout << cand->text();

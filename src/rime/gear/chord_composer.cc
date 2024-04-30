@@ -51,7 +51,7 @@ ProcessResult ChordComposer::ProcessFunctionKey(const KeyEvent& key_event) {
   if (key_event.release()) {
     return kNoop;
   }
-  int ch = key_event.keycode();
+  unsigned int ch = key_event.keycode();
   if (ch == XK_Return) {
     if (!raw_sequence_.empty()) {
       // commit raw input
@@ -80,8 +80,8 @@ static const char map_to_base_layer[] = {
     "`abcdefghijklmno"
     "pqrstuvwxyz[\\]`"};
 
-inline static int get_base_layer_key_code(const KeyEvent& key_event) {
-  int ch = key_event.keycode();
+inline static unsigned int get_base_layer_key_code(const KeyEvent& key_event) {
+  unsigned int ch = key_event.keycode();
   bool is_shift = key_event.shift();
   return (is_shift && ch >= 0x20 && ch <= 0x7e) ? map_to_base_layer[ch - 0x20]
                                                 : ch;
@@ -109,7 +109,7 @@ ProcessResult ChordComposer::ProcessChordingKey(const KeyEvent& key_event) {
     state_.Clear();
     return kNoop;
   }
-  int ch = get_base_layer_key_code(key_event);
+  unsigned int ch = get_base_layer_key_code(key_event);
   // non chording key
   if (std::find(chording_keys_.begin(), chording_keys_.end(),
                 KeyEvent{ch, 0}) == chording_keys_.end()) {
@@ -143,7 +143,7 @@ ProcessResult ChordComposer::ProcessKeyEvent(const KeyEvent& key_event) {
     return ProcessFunctionKey(key_event);
   }
   bool is_key_up = key_event.release();
-  int ch = key_event.keycode();
+  unsigned int ch = key_event.keycode();
   if (!is_key_up && ch >= 0x20 && ch <= 0x7e) {
     // save raw input
     if (!engine_->context()->IsComposing() || !raw_sequence_.empty()) {

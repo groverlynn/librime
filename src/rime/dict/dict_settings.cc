@@ -68,8 +68,8 @@ bool DictSettings::use_rule_based_encoder() {
   return (*this)["encoder"]["rules"].IsList();
 }
 
-int DictSettings::max_phrase_length() {
-  return (*this)["max_phrase_length"].ToInt();
+size_t DictSettings::max_phrase_length() {
+  return (size_t)(*this)["max_phrase_length"].ToInt();
 }
 
 double DictSettings::min_phrase_weight() {

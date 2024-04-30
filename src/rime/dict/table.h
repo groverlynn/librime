@@ -85,7 +85,7 @@ RIME_TABLE_UNION(PhraseIndex, Array<char>, TrunkIndex, trunk, TailIndex, tail);
 using Index = HeadIndex;
 
 struct Metadata {
-  static const int kFormatMaxLength = 32;
+  static const size_t kFormatMaxLength = 32;
   char format[kFormatMaxLength];
   uint32_t dict_file_checksum;
   uint32_t num_syllables;
@@ -181,8 +181,8 @@ class Table : public MappedFile {
                       uint32_t dict_file_checksum = 0);
 
   bool GetSyllabary(Syllabary* syllabary);
-  RIME_API string GetSyllableById(int syllable_id);
-  RIME_API TableAccessor QueryWords(int syllable_id);
+  RIME_API string GetSyllableById(SyllableId syllable_id);
+  RIME_API TableAccessor QueryWords(SyllableId syllable_id);
   RIME_API TableAccessor QueryPhrases(const Code& code);
   RIME_API bool Query(const SyllableGraph& syll_graph,
                       size_t start_pos,

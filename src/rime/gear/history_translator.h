@@ -20,7 +20,7 @@ class HistoryTranslator : public Translator {
  protected:
   string tag_;
   string input_;
-  int size_;
+  size_t size_;
   double initial_quality_;
 };
 

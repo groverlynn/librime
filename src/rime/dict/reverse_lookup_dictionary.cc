@@ -88,7 +88,7 @@ bool ReverseDb::Build(DictSettings* settings,
                       uint32_t dict_file_checksum) {
   LOG(INFO) << "building reversedb...";
   ReverseLookupTable rev_table;
-  int syllable_id = 0;
+  size_t syllable_id = 0;
   for (const string& syllable : syllabary) {
     auto it = vocabulary.find(syllable_id++);
     if (it == vocabulary.end())
@@ -103,7 +103,7 @@ bool ReverseDb::Build(DictSettings* settings,
   size_t entry_count = rev_table.size() + stems.size();
   vector<StringId> key_ids(entry_count);
   vector<StringId> value_ids(entry_count);
-  int i = 0;
+  size_t i = 0;
   // save reverse lookup entries
   for (const auto& v : rev_table) {
     const string& key(v.first);

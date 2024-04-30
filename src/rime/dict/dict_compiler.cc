@@ -159,7 +159,7 @@ bool DictCompiler::Compile(const path& schema_file) {
       !BuildPrism(schema_file, dict_file_checksum, schema_file_checksum)) {
     return false;
   }
-  for (int table_index = 1; table_index < tables_.size(); ++table_index) {
+  for (size_t table_index = 1; table_index < tables_.size(); ++table_index) {
     const auto& pack_name = packs_[table_index - 1];
     auto pack_table = tables_[table_index];
     EntryCollector collector(std::move(syllabary));
@@ -213,7 +213,7 @@ static path relocate_target(const path& source_path,
   return target_resolver->ResolvePath(resource_id);
 }
 
-bool DictCompiler::BuildTable(int table_index,
+bool DictCompiler::BuildTable(size_t table_index,
                               EntryCollector& collector,
                               DictSettings* settings,
                               const vector<path>& dict_files,

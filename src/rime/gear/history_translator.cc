@@ -25,7 +25,7 @@ HistoryTranslator::HistoryTranslator(const Ticket& ticket)
   Config* config = ticket.schema->config();
   config->GetString(name_space_ + "/tag", &tag_);
   config->GetString(name_space_ + "/input", &input_);
-  config->GetInt(name_space_ + "/size", &size_);
+  config->GetInt(name_space_ + "/size", (int*)&size_);
   config->GetDouble(name_space_ + "/initial_quality", &initial_quality_);
 }
 
@@ -41,7 +41,7 @@ an<Translation> HistoryTranslator::Query(const string& input,
     return nullptr;
   auto translation = New<FifoTranslation>();
   auto it = history.rbegin();
-  int count = 0;
+  size_t count = 0;
   for (; it != history.rend(); ++it) {
     if (it->type == "thru")
       continue;

@@ -14,13 +14,13 @@ FallbackSegmentor::FallbackSegmentor(const Ticket& ticket)
     : Segmentor(ticket) {}
 
 bool FallbackSegmentor::Proceed(Segmentation* segmentation) {
-  int len = segmentation->GetCurrentSegmentLength();
+  size_t len = segmentation->GetCurrentSegmentLength();
   DLOG(INFO) << "current segment length: " << len;
   if (len > 0)
     return false;
 
   const string& input(segmentation->input());
-  int k = segmentation->GetCurrentStartPosition();
+  size_t k = segmentation->GetCurrentStartPosition();
   DLOG(INFO) << "current start pos: " << k;
   if (k == input.length())
     return false;

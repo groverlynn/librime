@@ -78,8 +78,8 @@ bool Deployer::HasPendingTasks() {
 bool Deployer::Run() {
   LOG(INFO) << "running deployment tasks:";
   message_sink_("deploy", "start");
-  int success = 0;
-  int failure = 0;
+  size_t success = 0;
+  size_t failure = 0;
   do {
     while (auto task = NextTask()) {
       try {

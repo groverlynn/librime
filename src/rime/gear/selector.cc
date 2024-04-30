@@ -136,19 +136,19 @@ ProcessResult Selector::ProcessKeyEvent(const KeyEvent& key_event) {
     return result;
   }
 
-  int ch = key_event.keycode();
-  int index = -1;
+  unsigned int ch = key_event.keycode();
+  size_t index = -1;
   const string& select_keys(engine_->schema()->select_keys());
   if (!select_keys.empty() && !key_event.ctrl() && ch >= 0x20 && ch < 0x7f) {
     size_t pos = select_keys.find((char)ch);
     if (pos != string::npos) {
-      index = static_cast<int>(pos);
+      index = pos;
     }
   } else if (ch >= XK_0 && ch <= XK_9)
     index = ((ch - XK_0) + 9) % 10;
   else if (ch >= XK_KP_0 && ch <= XK_KP_9)
     index = ((ch - XK_KP_0) + 9) % 10;
-  if (index >= 0) {
+  if (index < 0xff) {
     SelectCandidateAt(ctx, index);
     return kAccepted;
   }
@@ -160,9 +160,9 @@ bool Selector::PreviousPage(Context* ctx) {
   Composition& comp = ctx->composition();
   if (comp.empty())
     return false;
-  int page_size = engine_->schema()->page_size();
-  int selected_index = comp.back().selected_index;
-  int index = selected_index < page_size ? 0 : selected_index - page_size;
+  size_t page_size = engine_->schema()->page_size();
+  size_t selected_index = comp.back().selected_index;
+  size_t index = selected_index < page_size ? 0 : selected_index - page_size;
   comp.back().selected_index = index;
   comp.back().tags.insert("paging");
   return true;
@@ -172,10 +172,10 @@ bool Selector::NextPage(Context* ctx) {
   Composition& comp = ctx->composition();
   if (comp.empty() || !comp.back().menu)
     return false;
-  int page_size = engine_->schema()->page_size();
-  int index = comp.back().selected_index + page_size;
-  int page_start = (index / page_size) * page_size;
-  int candidate_count = comp.back().menu->Prepare(page_start + page_size);
+  size_t page_size = engine_->schema()->page_size();
+  size_t index = comp.back().selected_index + page_size;
+  size_t page_start = (index / page_size) * page_size;
+  size_t candidate_count = comp.back().menu->Prepare(page_start + page_size);
   if (candidate_count <= page_start) {
     bool page_down_cycle = engine_->schema()->page_down_cycle();
     if (page_down_cycle) {  // Cycle back to page 1 if true
@@ -204,8 +204,8 @@ bool Selector::PreviousCandidate(Context* ctx) {
   Composition& comp = ctx->composition();
   if (comp.empty())
     return false;
-  int index = comp.back().selected_index;
-  if (index <= 0) {
+  size_t index = comp.back().selected_index;
+  if (index == 0) {
     // in case of linear layout, fall back to navigator
     return !is_linear_layout(ctx);
   }
@@ -222,8 +222,8 @@ bool Selector::NextCandidate(Context* ctx) {
   Composition& comp = ctx->composition();
   if (comp.empty() || !comp.back().menu)
     return false;
-  int index = comp.back().selected_index + 1;
-  int candidate_count = comp.back().menu->Prepare(index + 1);
+  size_t index = comp.back().selected_index + 1;
+  size_t candidate_count = comp.back().menu->Prepare(index + 1);
   if (candidate_count <= index)
     return true;
   comp.back().selected_index = index;
@@ -252,15 +252,15 @@ bool Selector::End(Context* ctx) {
   return Home(ctx);
 }
 
-bool Selector::SelectCandidateAt(Context* ctx, int index) {
+bool Selector::SelectCandidateAt(Context* ctx, size_t index) {
   Composition& comp = ctx->composition();
   if (comp.empty())
     return false;
-  int page_size = engine_->schema()->page_size();
+  size_t page_size = engine_->schema()->page_size();
   if (index >= page_size)
     return false;
-  int selected_index = comp.back().selected_index;
-  int page_start = (selected_index / page_size) * page_size;
+  size_t selected_index = comp.back().selected_index;
+  size_t page_start = (selected_index / page_size) * page_size;
   return ctx->Select(page_start + index);
 }
 

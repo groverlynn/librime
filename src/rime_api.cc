@@ -191,7 +191,7 @@ RIME_API void RimeCleanupAllSessions() {
 
 // input
 
-RIME_API Bool RimeProcessKey(RimeSessionId session_id, int keycode, int mask) {
+RIME_API Bool RimeProcessKey(RimeSessionId session_id, unsigned int keycode, unsigned int mask) {
   an<Session> session(Service::instance().GetSession(session_id));
   if (!session)
     return False;
@@ -255,19 +255,19 @@ RIME_API Bool RimeGetContext(RimeSessionId session_id, RimeContext* context) {
   }
   if (ctx->HasMenu()) {
     Segment& seg(ctx->composition().back());
-    int page_size = 5;
+    size_t page_size = 5;
     Schema* schema = session->schema();
     if (schema)
       page_size = schema->page_size();
-    int selected_index = seg.selected_index;
-    int page_no = selected_index / page_size;
+    size_t selected_index = seg.selected_index;
+    size_t page_no = selected_index / page_size;
     the<Page> page(seg.menu->CreatePage(page_size, page_no));
     if (page) {
       context->menu.page_size = page_size;
       context->menu.page_no = page_no;
       context->menu.is_last_page = Bool(page->is_last_page);
       context->menu.highlighted_candidate_index = selected_index % page_size;
-      int i = 0;
+      size_t i = 0;
       context->menu.num_candidates = page->candidates.size();
       context->menu.candidates = new RimeCandidate[page->candidates.size()];
       for (const an<Candidate>& cand : page->candidates) {
@@ -283,13 +283,13 @@ RIME_API Bool RimeGetContext(RimeSessionId session_id, RimeContext* context) {
         Config* config = schema->config();
         an<ConfigList> select_labels =
             config->GetList("menu/alternative_select_labels");
-        if (select_labels && (size_t)page_size <= select_labels->size()) {
+        if (select_labels && page_size <= select_labels->size()) {
           context->select_labels = new char*[page_size];
-          for (size_t i = 0; i < (size_t)page_size; ++i) {
-            an<ConfigValue> value = select_labels->GetValueAt(i);
+          for (size_t j = 0; j < page_size; ++i) {
+            an<ConfigValue> value = select_labels->GetValueAt(j);
             string label = value->str();
-            context->select_labels[i] = new char[label.length() + 1];
-            std::strcpy(context->select_labels[i], label.c_str());
+            context->select_labels[j] = new char[label.length() + 1];
+            std::strcpy(context->select_labels[j], label.c_str());
           }
         }
       }
@@ -302,7 +302,7 @@ RIME_API Bool RimeFreeContext(RimeContext* context) {
   if (!context || context->data_size <= 0)
     return False;
   delete[] context->composition.preedit;
-  for (int i = 0; i < context->menu.num_candidates; ++i) {
+  for (size_t i = 0; i < context->menu.num_candidates; ++i) {
     delete[] context->menu.candidates[i].text;
     delete[] context->menu.candidates[i].comment;
   }
@@ -310,7 +310,7 @@ RIME_API Bool RimeFreeContext(RimeContext* context) {
   delete[] context->menu.select_keys;
   if (RIME_STRUCT_HAS_MEMBER(*context, context->select_labels) &&
       context->select_labels) {
-    for (int i = 0; i < context->menu.page_size; ++i) {
+    for (size_t i = 0; i < context->menu.page_size; ++i) {
       delete[] context->select_labels[i];
     }
     delete[] context->select_labels;
@@ -385,7 +385,7 @@ RIME_API Bool RimeFreeStatus(RimeStatus* status) {
 
 RIME_API Bool RimeCandidateListFromIndex(RimeSessionId session_id,
                                          RimeCandidateListIterator* iterator,
-                                         int index) {
+                                         size_t index) {
   if (!iterator)
     return False;
   an<Session> session(Service::instance().GetSession(session_id));

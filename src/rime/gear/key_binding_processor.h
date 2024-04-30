@@ -13,7 +13,7 @@
 
 namespace rime {
 
-template <class T, int N = 1>
+template <class T, size_t N = 1>
 class KeyBindingProcessor {
  public:
   typedef bool Handler(Context* ctx);
@@ -38,18 +38,18 @@ class KeyBindingProcessor {
 
   ProcessResult ProcessKeyEvent(const KeyEvent& key_event,
                                 Context* ctx,
-                                int keymap_selector = 0,
-                                int fallback_options = FallbackOptions::None);
+                                size_t keymap_selector = 0,
+                                FallbackOptions fallback_options = FallbackOptions::None);
   void LoadConfig(Config* config,
                   const string& section,
-                  int kemap_selector = 0);
+                  size_t kemap_selector = 0);
 
  protected:
   struct Keymap : map<KeyEvent, HandlerPtr> {
     void Bind(KeyEvent key_event, HandlerPtr action);
   };
 
-  Keymap& get_keymap(int keymap_selector = 0);
+  Keymap& get_keymap(size_t keymap_selector = 0);
 
   bool Accept(const KeyEvent& key_event, Context* ctx, Keymap& keymap);
 

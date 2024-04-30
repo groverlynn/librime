@@ -26,7 +26,7 @@ class TsvReader {
   TsvReader(const path& file_path, TsvParser parser)
       : file_path_(file_path), parser_(parser) {}
   // return number of records read
-  int operator()(Sink* sink);
+  size_t operator()(Sink* sink);
 
  protected:
   path file_path_;
@@ -38,7 +38,7 @@ class TsvWriter {
   TsvWriter(const path& file_path, TsvFormatter formatter)
       : file_path_(file_path), formatter_(formatter) {}
   // return number of records written
-  int operator()(Source* source);
+  size_t operator()(Source* source);
 
  protected:
   path file_path_;
@@ -49,22 +49,22 @@ class TsvWriter {
 };
 
 template <class SinkType>
-int operator<<(SinkType& sink, TsvReader& reader) {
+size_t operator<<(SinkType& sink, TsvReader& reader) {
   return reader(&sink);
 }
 
 template <class SinkType>
-int operator>>(TsvReader& reader, SinkType& sink) {
+size_t operator>>(TsvReader& reader, SinkType& sink) {
   return reader(&sink);
 }
 
 template <class SourceType>
-int operator<<(TsvWriter& writer, SourceType& source) {
+size_t operator<<(TsvWriter& writer, SourceType& source) {
   return writer(&source);
 }
 
 template <class SourceType>
-int operator>>(SourceType& source, TsvWriter& writer) {
+size_t operator>>(SourceType& source, TsvWriter& writer) {
   return writer(&source);
 }
 

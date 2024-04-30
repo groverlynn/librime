@@ -118,7 +118,7 @@ bool Projection::Apply(Script* value) {
   if (!value || value->empty())
     return false;
   bool modified = false;
-  int round = 0;
+  size_t round = 0;
   for (an<Calculation>& x : calculation_) {
     ++round;
     DLOG(INFO) << "round #" << round;

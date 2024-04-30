@@ -38,13 +38,13 @@ class ScriptTranslator : public Translator,
   string GetPrecedingText(size_t start) const;
 
   // options
-  int max_homophones() const { return max_homophones_; }
-  int spelling_hints() const { return spelling_hints_; }
+  size_t max_homophones() const { return max_homophones_; }
+  size_t spelling_hints() const { return spelling_hints_; }
   bool always_show_comments() const { return always_show_comments_; }
 
  protected:
-  int max_homophones_ = 1;
-  int spelling_hints_ = 0;
+  size_t max_homophones_ = 1;
+  size_t spelling_hints_ = 0;
   bool always_show_comments_ = false;
   bool enable_correction_ = false;
   the<Corrector> corrector_;

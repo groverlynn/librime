@@ -38,7 +38,7 @@ class DictCompiler {
   void set_options(int options) { options_ = options; }
 
  private:
-  bool BuildTable(int table_index,
+  bool BuildTable(size_t table_index,
                   EntryCollector& collector,
                   DictSettings* settings,
                   const vector<path>& dict_files,

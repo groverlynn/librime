@@ -57,8 +57,8 @@ struct CodeCoords {
 };
 
 struct TableEncodingRule {
-  int min_word_length;
-  int max_word_length;
+  size_t min_word_length;
+  size_t max_word_length;
   vector<CodeCoords> coords;
 };
 
@@ -87,7 +87,7 @@ class RIME_API TableEncoder : public Encoder {
                  const string& value,
                  size_t start_pos,
                  RawCode* code,
-                 int* limit);
+                 size_t* limit);
 
   bool loaded_;
   // settings
@@ -95,7 +95,7 @@ class RIME_API TableEncoder : public Encoder {
   vector<boost::regex> exclude_patterns_;
   string tail_anchor_;
   // for optimization
-  int max_phrase_length_;
+  size_t max_phrase_length_;
 };
 
 // for syllable-based phrase encoding
@@ -110,7 +110,7 @@ class ScriptEncoder : public Encoder {
                  const string& value,
                  size_t start_pos,
                  RawCode* code,
-                 int* limit);
+                 size_t* limit);
 };
 
 }  // namespace rime

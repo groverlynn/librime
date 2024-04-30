@@ -51,7 +51,7 @@ typedef int Bool;
 #define RIME_STRUCT_INIT(Type, var) \
   ((var).data_size = sizeof(Type) - sizeof((var).data_size))
 #define RIME_STRUCT_HAS_MEMBER(var, member)           \
-  ((int)(sizeof((var).data_size) + (var).data_size) > \
+  (sizeof((var).data_size) + (var).data_size > \
    (char*)&member - (char*)&var)
 #define RIME_STRUCT_CLEAR(var) \
   memset((char*)&(var) + sizeof((var).data_size), 0, (var).data_size)
@@ -69,7 +69,7 @@ typedef int Bool;
  *  Should be initialized by calling RIME_STRUCT_INIT(Type, var)
  */
 typedef struct rime_traits_t {
-  int data_size;
+  size_t data_size;
   // v0.9
   const char* shared_data_dir;
   const char* user_data_dir;
@@ -104,10 +104,10 @@ typedef struct rime_traits_t {
 } RimeTraits;
 
 typedef struct {
-  int length;
-  int cursor_pos;
-  int sel_start;
-  int sel_end;
+  size_t length;
+  size_t cursor_pos;
+  size_t sel_start;
+  size_t sel_end;
   char* preedit;
 } RimeComposition;
 
@@ -118,11 +118,11 @@ typedef struct rime_candidate_t {
 } RimeCandidate;
 
 typedef struct {
-  int page_size;
-  int page_no;
+  size_t page_size;
+  size_t page_no;
   Bool is_last_page;
-  int highlighted_candidate_index;
-  int num_candidates;
+  size_t highlighted_candidate_index;
+  size_t num_candidates;
   RimeCandidate* candidates;
   char* select_keys;
 } RimeMenu;
@@ -131,7 +131,7 @@ typedef struct {
  *  Should be initialized by calling RIME_STRUCT_INIT(Type, var);
  */
 typedef struct rime_commit_t {
-  int data_size;
+  size_t data_size;
   // v0.9
   char* text;
 } RimeCommit;
@@ -140,7 +140,7 @@ typedef struct rime_commit_t {
  *  Should be initialized by calling RIME_STRUCT_INIT(Type, var);
  */
 typedef struct rime_context_t {
-  int data_size;
+  size_t data_size;
   // v0.9
   RimeComposition composition;
   RimeMenu menu;
@@ -153,7 +153,7 @@ typedef struct rime_context_t {
  *  Should be initialized by calling RIME_STRUCT_INIT(Type, var);
  */
 typedef struct rime_status_t {
-  int data_size;
+  size_t data_size;
   // v0.9
   char* schema_id;
   char* schema_name;
@@ -168,7 +168,7 @@ typedef struct rime_status_t {
 
 typedef struct rime_candidate_list_iterator_t {
   void* ptr;
-  int index;
+  size_t index;
   RimeCandidate candidate;
 } RimeCandidateListIterator;
 
@@ -179,7 +179,7 @@ typedef struct rime_config_t {
 typedef struct rime_config_iterator_t {
   void* list;
   void* map;
-  int index;
+  size_t index;
   const char* key;
   const char* path;
 } RimeConfigIterator;
@@ -272,7 +272,7 @@ RIME_API void RimeCleanupAllSessions(void);
 
 // Input
 
-RIME_API Bool RimeProcessKey(RimeSessionId session_id, int keycode, int mask);
+RIME_API Bool RimeProcessKey(RimeSessionId session_id, unsigned int keycode, unsigned int mask);
 /*!
  * return True if there is unread commit text
  */
@@ -295,7 +295,7 @@ RIME_API Bool RimeCandidateListNext(RimeCandidateListIterator* iterator);
 RIME_API void RimeCandidateListEnd(RimeCandidateListIterator* iterator);
 RIME_API Bool RimeCandidateListFromIndex(RimeSessionId session_id,
                                          RimeCandidateListIterator* iterator,
-                                         int index);
+                                         size_t index);
 RIME_API Bool RimeSelectCandidate(RimeSessionId session_id, size_t index);
 RIME_API Bool RimeSelectCandidateOnCurrentPage(RimeSessionId session_id,
                                                size_t index);
@@ -395,11 +395,11 @@ RIME_API Bool RimeSetInput(RimeSessionId session_id, const char* input);
  * module
  */
 typedef struct rime_custom_api_t {
-  int data_size;
+  size_t data_size;
 } RimeCustomApi;
 
 typedef struct rime_module_t {
-  int data_size;
+  size_t data_size;
 
   const char* module_name;
   void (*initialize)(void);
@@ -426,7 +426,7 @@ RIME_API const char* RimeGetUserId(void);
  *  RimeApi is for rime v1.0+
  */
 typedef struct rime_api_t {
-  int data_size;
+  size_t data_size;
 
   /*! setup
    *  Call this function before accessing any other API functions.
@@ -481,7 +481,7 @@ typedef struct rime_api_t {
 
   // input
 
-  Bool (*process_key)(RimeSessionId session_id, int keycode, int mask);
+  Bool (*process_key)(RimeSessionId session_id, unsigned int keycode, unsigned int mask);
   // return True if there is unread commit text
   Bool (*commit_composition)(RimeSessionId session_id);
   void (*clear_composition)(RimeSessionId session_id);
@@ -624,7 +624,7 @@ typedef struct rime_api_t {
 
   Bool (*candidate_list_from_index)(RimeSessionId session_id,
                                     RimeCandidateListIterator* iterator,
-                                    int index);
+                                    size_t index);
 
   //! prebuilt data directory.
   //! \deprecated use get_prebuilt_data_dir_s instead.

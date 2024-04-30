@@ -186,8 +186,8 @@ bool WorkspaceUpdate::Run(Deployer* deployer) {
   }
 
   LOG(INFO) << "updating schemas.";
-  int success = 0;
-  int failure = 0;
+  size_t success = 0;
+  size_t failure = 0;
   map<string, path> schemas;
   the<ResourceResolver> resolver(Service::instance().CreateResourceResolver(
       {"schema_source_file", "", ".schema.yaml"}));
@@ -545,7 +545,7 @@ bool BackupConfigFiles::Run(Deployer* deployer) {
   if (!MaybeCreateDirectory(backup_dir)) {
     return false;
   }
-  int success = 0, failure = 0, latest = 0, skipped = 0;
+  size_t success = 0, failure = 0, latest = 0, skipped = 0;
   for (fs::directory_iterator iter(user_data_path), end; iter != end; ++iter) {
     path entry(iter->path());
     if (!fs::is_regular_file(entry))
@@ -585,7 +585,7 @@ bool CleanupTrash::Run(Deployer* deployer) {
   if (!fs::exists(user_data_path))
     return false;
   path trash = user_data_path / "trash";
-  int success = 0, failure = 0;
+  size_t success = 0, failure = 0;
   for (fs::directory_iterator iter(user_data_path), end; iter != end; ++iter) {
     path entry(iter->path());
     if (!fs::is_regular_file(entry))
@@ -632,7 +632,7 @@ bool CleanOldLogFiles::Run(Deployer* deployer) {
 
   DLOG(INFO) << "scanning " << dirs.size() << " temp directory for log files.";
 
-  int removed = 0;
+  size_t removed = 0;
   const string& app_name = deployer->app_name;
   for (const auto& dir : dirs) {
     // avoid iteration on non-existing directory, which may cause error

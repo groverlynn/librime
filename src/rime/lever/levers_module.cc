@@ -201,10 +201,10 @@ static const char* rime_levers_get_schema_file_path(RimeSchemaInfo* info) {
 
 static Bool rime_levers_select_schemas(RimeSwitcherSettings* settings,
                                        const char* schema_id_list[],
-                                       int count) {
+                                       size_t count) {
   auto ss = reinterpret_cast<SwitcherSettings*>(settings);
   SwitcherSettings::Selection selection;
-  for (int i = 0; i < count; ++i) {
+  for (size_t i = 0; i < count; ++i) {
     selection.push_back(schema_id_list[i]);
   }
   return ss->Select(selection);

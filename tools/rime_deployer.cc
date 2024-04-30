@@ -14,13 +14,13 @@
 
 using namespace rime;
 
-int add_schema(int count, char* schemas[]) {
+size_t add_schema(size_t count, char* schemas[]) {
   Config config;
   if (!config.LoadFromFile(path{"default.custom.yaml"})) {
     LOG(INFO) << "creating new file 'default.custom.yaml'.";
   }
   ConfigMapEntryRef schema_list(config["patch"]["schema_list"]);
-  for (int i = 0; i < count; ++i) {
+  for (size_t i = 0; i < count; ++i) {
     if (!schemas[i])
       return 1;
     string new_schema_id(schemas[i]);

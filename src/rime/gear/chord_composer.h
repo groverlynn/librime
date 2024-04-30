@@ -15,21 +15,21 @@
 
 namespace rime {
 
-using Chord = set<int>;
+using Chord = set<unsigned int>;
 
 struct ChordingState {
   Chord pressed_keys;
   Chord recognized_chord;
 
-  bool IsPressed(int ch) const {
+  bool IsPressed(unsigned int ch) const {
     return pressed_keys.find(ch) != pressed_keys.end();
   }
 
-  bool PressKey(int ch) { return pressed_keys.insert(ch).second; }
+  bool PressKey(unsigned int ch) { return pressed_keys.insert(ch).second; }
 
-  bool ReleaseKey(int ch) { return pressed_keys.erase(ch) != 0; }
+  bool ReleaseKey(unsigned int ch) { return pressed_keys.erase(ch) != 0; }
 
-  bool AddKeyToChord(int ch) { return recognized_chord.insert(ch).second; }
+  bool AddKeyToChord(unsigned int ch) { return recognized_chord.insert(ch).second; }
 
   void Clear() {
     pressed_keys.clear();

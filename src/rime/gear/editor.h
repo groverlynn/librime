@@ -19,8 +19,8 @@ class Context;
 
 class Editor : public Processor, public KeyBindingProcessor<Editor> {
  public:
-  typedef ProcessResult CharHandler(Context* ctx, int ch);
-  using CharHandlerPtr = ProcessResult (Editor::*)(Context* ctx, int ch);
+  typedef ProcessResult CharHandler(Context* ctx,unsigned int ch);
+  using CharHandlerPtr = ProcessResult (Editor::*)(Context* ctx, unsigned int ch);
 
   Editor(const Ticket& ticket, bool auto_commit);
   ProcessResult ProcessKeyEvent(const KeyEvent& key_event);

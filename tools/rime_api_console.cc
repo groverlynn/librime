@@ -53,11 +53,11 @@ void print_composition(RimeComposition* composition) {
 void print_menu(RimeMenu* menu) {
   if (menu->num_candidates == 0)
     return;
-  printf("page: %d%c (of size %d)\n", menu->page_no + 1,
+  printf("page: %zu%c (of size %zu)\n", menu->page_no + 1,
          menu->is_last_page ? '$' : ' ', menu->page_size);
-  for (int i = 0; i < menu->num_candidates; ++i) {
+  for (size_t i = 0; i < menu->num_candidates; ++i) {
     bool highlighted = i == menu->highlighted_candidate_index;
-    printf("%d. %c%s%c%s\n", i + 1, highlighted ? '[' : ' ',
+    printf("%zu. %c%s%c%s\n", i + 1, highlighted ? '[' : ' ',
            menu->candidates[i].text, highlighted ? ']' : ' ',
            menu->candidates[i].comment ? menu->candidates[i].comment : "");
   }
@@ -102,7 +102,7 @@ bool execute_special_command(const char* line, RimeSessionId session_id) {
     if (rime->get_schema_list(&list)) {
       printf("schema list:\n");
       for (size_t i = 0; i < list.size; ++i) {
-        printf("%lu. %s [%s]\n", (i + 1), list.list[i].name,
+        printf("%zu. %s [%s]\n", (i + 1), list.list[i].name,
                list.list[i].schema_id);
       }
       rime->free_schema_list(&list);
@@ -138,7 +138,7 @@ bool execute_special_command(const char* line, RimeSessionId session_id) {
     RimeCandidateListIterator iterator = {0};
     if (rime->candidate_list_begin(session_id, &iterator)) {
       while (rime->candidate_list_next(&iterator)) {
-        printf("%d. %s", iterator.index + 1, iterator.candidate.text);
+        printf("%zu. %s", iterator.index + 1, iterator.candidate.text);
         if (iterator.candidate.comment)
           printf(" (%s)", iterator.candidate.comment);
         putchar('\n');

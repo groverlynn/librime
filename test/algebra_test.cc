@@ -13,7 +13,7 @@ static const char* kTransliteration =
     "xlit/ABCDEFGHIJKLMNOPQRSTUVWXYZ/abcdefghijklmnopqrstuvwxyz/";
 static const char* kTransformation = "xform/^([zcs])h(.*)$/$1$2/";
 
-static const int kNumOfInstructions = 5;
+static const size_t kNumOfInstructions = 5;
 static const char* kInstructions[kNumOfInstructions] = {
     "xform/^(\\l+)\\d$/$1/",       "erase/^[wxy].*$/",
     "derive/^([zcs])h(.*)$/$1$2/", "abbrev/^(\\l).+$/$1/",
@@ -34,7 +34,7 @@ TEST(RimeAlgebraTest, SpellingManipulation) {
 
 TEST(RimeAlgebraTest, Projection) {
   auto c = rime::New<rime::ConfigList>();
-  for (int i = 0; i < kNumOfInstructions; ++i) {
+  for (size_t i = 0; i < kNumOfInstructions; ++i) {
     c->Append(rime::New<rime::ConfigValue>(kInstructions[i]));
   }
   rime::Projection p;

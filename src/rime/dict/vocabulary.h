@@ -50,9 +50,9 @@ struct DictEntry {
   Code code;           // multi-syllable code from prism
   string custom_code;  // user defined code
   double weight = 0.0;
-  int commit_count = 0;
-  int remaining_code_length = 0;
-  int matching_code_size = 0;
+  size_t commit_count = 0;
+  size_t remaining_code_length = 0;
+  size_t matching_code_size = 0;
 
   DictEntry() = default;
   ShortDictEntry ToShort() const { return {text, code, weight}; }
