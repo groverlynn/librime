@@ -137,7 +137,6 @@ bool Context::Highlight(size_t index) {
     return false;
   }
   seg.selected_index = new_index;
-  update_notifier_(this);
   DLOG(INFO) << "selection changed from: " << previous_index
              << " to: " << new_index;
   return true;
