@@ -16,6 +16,8 @@
 #include <rime/signature.h>
 #include <rime/switches.h>
 
+#include "rime_api.h"
+
 using namespace rime;
 
 void rime_declare_module_dependencies();
@@ -36,10 +38,11 @@ RIME_DEPRECATED void RimeSetup(RimeTraits* traits) {
 
 RIME_DEPRECATED void RimeSetNotificationHandler(RimeNotificationHandler handler,
                                                 void* context_object) {
-  using namespace std::placeholders;
   if (handler) {
     Service::instance().SetNotificationHandler(
-        std::bind(handler, context_object, _1, _2, _3));
+        [context_object, handler](auto id, auto type, auto value) {
+          handler(context_object, id, type, value);
+        });
   } else {
     Service::instance().ClearNotificationHandler();
   }

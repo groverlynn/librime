@@ -142,27 +142,26 @@ bool Context::Highlight(size_t index) {
   return true;
 }
 
-bool Context::DeleteCandidate(
-    function<an<Candidate>(Segment& seg)> get_candidate) {
-  if (composition_.empty())
+bool Context::DeleteCandidate(an<Candidate> cand) {
+  if (!cand)
     return false;
-  Segment& seg(composition_.back());
-  if (auto cand = get_candidate(seg)) {
-    DLOG(INFO) << "Deleting candidate: '" << cand->text();
-    delete_notifier_(this);
-    return true;  // CAVEAT: this doesn't mean anything is deleted for sure
-  }
-  return false;
+  DLOG(INFO) << "Deleting candidate: " << cand->text();
+  delete_notifier_(this);
+  return true;  // CAVEAT: this doesn't mean anything is deleted for sure
 }
 
 bool Context::DeleteCandidate(size_t index) {
-  return DeleteCandidate(
-      [index](Segment& seg) { return seg.GetCandidateAt(index); });
+  if (composition_.empty())
+    return false;
+  Segment& seg(composition_.back());
+  return DeleteCandidate(seg.GetCandidateAt(index));
 }
 
 bool Context::DeleteCurrentSelection() {
-  return DeleteCandidate(
-      [](Segment& seg) { return seg.GetSelectedCandidate(); });
+  if (composition_.empty())
+    return false;
+  Segment& seg(composition_.back());
+  return DeleteCandidate(seg.GetSelectedCandidate());
 }
 
 bool Context::ConfirmCurrentSelection() {
