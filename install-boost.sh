@@ -3,13 +3,13 @@ set -ex
 
 RIME_ROOT="$(cd "$(dirname "$0")"; pwd)"
 
-boost_version="${boost_version=1.84.0}"
+boost_version="${boost_version=1_85_0}"
 
-BOOST_ROOT="${BOOST_ROOT=${RIME_ROOT}/deps/boost-${boost_version}}"
+BOOST_ROOT="${BOOST_ROOT=${RIME_ROOT}/deps/boost_${boost_version}}"
 
-boost_tarball="boost-${boost_version}.tar.xz"
-download_url="https://github.com/boostorg/boost/releases/download/boost-${boost_version}/${boost_tarball}"
-boost_tarball_sha256sum="2e64e5d79a738d0fa6fb546c6e5c2bd28f88d268a2a080546f74e5ff98f29d0e  ${boost_tarball}"
+boost_tarball="boost_${boost_version}.tar.gz"
+download_url="https://archives.boost.io/release/1.85.0/source/${boost_tarball}"
+boost_tarball_sha256sum="be0d91732d5b0cc6fbb275c7939974457e79b54d6f07ce2e3dfdd68bef883b0b  ${boost_tarball}"
 
 download_boost_source() {
     cd "${RIME_ROOT}/deps"
